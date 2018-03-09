@@ -12,7 +12,9 @@ from numpy import eye
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--target_image', type=str, help="The image you are transfering color to. Ex: target.png", required=True)
+parser.add_argument('--target_mask_image', type=str, help="The mask image for the image you are transfering color to. Ex: target_mask.png")
 parser.add_argument('--source_image', type=str, help="The image you are transfering color from. Ex: source.png", required=True)
+parser.add_argument('--source_mask_image', type=str, help="The mask image for the image you are transfering color from. Ex: source_mask.png")
 parser.add_argument('--output_image', default='output.png', help="The name of your output image. Ex: output.png", type=str)
 parser.add_argument('--mode', default='pca', help="The color transfer mode. Options are pca, chol, or sym.", type=str)
 parser.add_argument('--eps', default='1e-5', help="Your eps value in scientific notation or normal notation. Ex: 1e-5 or 0.00001", type=str)
@@ -65,5 +67,18 @@ def match_color(target_img, source_img, mode='pca', eps=1e-5):
     matched_img[matched_img<0] = 0
     return matched_img
 
-output_img = match_color(target_img, source_img, mode=transfer_mode, eps=float(eps_value))
+def mask_transfer
+
+    return masked_img
+
+if args.target_mask_image == None and args.source_mask_image == None:
+    output_img = match_color(target_img, source_img, mode=transfer_mode, eps=float(eps_value))
+elif args.target_mask_image == None and args.source_mask_image != None:
+    print "Target image mask was not provided"
+    raise SystemExit
+elif args.target_mask_image != None and args.source_mask_image == None:
+    print "Source image mask was not provided"
+    raise SystemExit
+elif args.target_mask_image != None and args.source_mask_image != None:
+    
 imsave(output_name, output_img)
