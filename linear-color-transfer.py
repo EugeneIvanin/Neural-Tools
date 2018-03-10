@@ -22,9 +22,12 @@ parser.parse_args()
 args = parser.parse_args()
 target_img = args.target_image
 source_img = args.source_image
+target_mask = args.target_mask_image
+source_mask = args.source_mask_image
 output_name = args.output_image
 transfer_mode = args.mode
 eps_value = args.eps
+color_list = args.color_codes.split(",")
 
 target_img = spi.imread(target_img, mode="RGB").astype(float)/256
 source_img = spi.imread(source_img, mode="RGB").astype(float)/256
@@ -67,9 +70,31 @@ def match_color(target_img, source_img, mode='pca', eps=1e-5):
     matched_img[matched_img<0] = 0
     return matched_img
 
-def mask_transfer
 
-    return masked_img
+def extract_mask(image, color_list):
+   mask = None
+   if color == 'green':
+       mask = np.all(image == (0,255,0), axis=-1)#.astype(int)   
+   elif color == 'black': 
+       mask = np.all(image == (0,0,0), axis=-1)#.astype(int)
+   elif color == 'white':
+       mask = np.all(image == (255,255,255), axis=-1)#.astype(int)
+   elif color == 'red':
+       mask = np.all(image == (255,0,0), axis=-1)#.astype(int)
+   elif color == 'blue':
+       mask = np.all(image == (0,0,255), axis=-1)#.astype(int)
+   elif color == 'yellow':
+       mask = np.all(image == (255,255,0), axis=-1)#.astype(int)
+   elif color == 'grey':
+       mask = np.all(image == (128,128,128), axis=-1)#.astype(int)
+   elif color == 'lightblue':
+       mask = np.all(image == (0,255,255), axis=-1)#.astype(int)
+   elif color == 'purple':
+       mask = np.all(image == (255,0,255), axis=-1)#.astype(int)
+   else: 
+       print "Color not recognized"
+   return mask 
+
 
 if args.target_mask_image == None and args.source_mask_image == None:
     output_img = match_color(target_img, source_img, mode=transfer_mode, eps=float(eps_value))
@@ -80,5 +105,14 @@ elif args.target_mask_image != None and args.source_mask_image == None:
     print "Source image mask was not provided"
     raise SystemExit
 elif args.target_mask_image != None and args.source_mask_image != None:
-    
+    target_mask = spi.imread(target_mask, mode="RGB").astype(float)
+    source_mask = spi.imread(source_mask, mode="RGB").astype(float)
+    target_mask_list = []
+    source_mask_list = []
+    for color in list(color_list):
+        print(color)
+        color_mask = extract_mask(target_mask, color)
+        target_mask_list.append(color_mask)
+        color_mask = extract_mask(source_mask, color)
+        source_mask_list.append(color_mask)
 imsave(output_name, output_img)
