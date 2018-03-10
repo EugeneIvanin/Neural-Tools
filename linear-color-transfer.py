@@ -111,8 +111,13 @@ elif args.target_mask_image != None and args.source_mask_image != None:
     source_mask_list = []
     for color in list(color_list):
         print(color)
+        #Get Target Mask Regions
         color_mask = extract_mask(target_mask, color)
+        image_mask = np.where(color_mask[...,None], target_img, 0)
+        imsave(output_name, image_overlay)
         target_mask_list.append(color_mask)
+        #Get Source Mask Regions
         color_mask = extract_mask(source_mask, color)
+        image_mask = np.where(color_mask[...,None], source_img, 0)
         source_mask_list.append(color_mask)
 imsave(output_name, output_img)
